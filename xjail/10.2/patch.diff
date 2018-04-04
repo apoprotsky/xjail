@@ -1,8 +1,8 @@
 Index: sys/dev/drm/drmP.h
 ==============================================================================
---- head/sys/dev/drm/drmP.h	Wed Jan 29 13:35:12 2014	(r261265)
-+++ head/sys/dev/drm/drmP.h	Wed Jan 29 13:41:13 2014	(r261266)
-@@ -227,7 +227,9 @@ enum {
+--- sys/dev/drm/drmP.h
++++ sys/dev/drm/drmP.h
+@@ -227,7 +227,9 @@
  
  #define PAGE_ALIGN(addr) round_page(addr)
  /* DRM_SUSER returns true if the user is superuser */
@@ -15,25 +15,25 @@ Index: sys/dev/drm/drmP.h
  #define DRM_SUSER(p)		(suser(p) == 0)
 Index: sys/kern/kern_jail.c
 ==============================================================================
---- head/sys/kern/kern_jail.c	Wed Jan 29 13:35:12 2014	(r261265)
-+++ head/sys/kern/kern_jail.c	Wed Jan 29 13:41:13 2014	(r261266)
-@@ -208,6 +208,7 @@ static char *pr_allow_names[] = {
- 	"allow.mount.zfs",
+--- sys/kern/kern_jail.c
++++ sys/kern/kern_jail.c
+@@ -208,6 +208,7 @@
  	"allow.mount.procfs",
  	"allow.mount.tmpfs",
+ 	"allow.mount.fdescfs",
 +	"allow.kmem",
  };
  const size_t pr_allow_names_size = sizeof(pr_allow_names);
  
-@@ -224,6 +225,7 @@ static char *pr_allow_nonames[] = {
- 	"allow.mount.nozfs",
+@@ -225,6 +226,7 @@
  	"allow.mount.noprocfs",
  	"allow.mount.notmpfs",
+ 	"allow.mount.nofdescfs",
 +	"allow.nokmem",
  };
  const size_t pr_allow_nonames_size = sizeof(pr_allow_nonames);
  
-@@ -3951,6 +3953,27 @@ prison_priv_check(struct ucred *cred, in
+@@ -4021,6 +4023,27 @@
  		return (0);
  
  		/*
@@ -61,7 +61,7 @@ Index: sys/kern/kern_jail.c
  		 * Allow jailed root to set loginclass.
  		 */
  	case PRIV_PROC_SETLOGINCLASS:
-@@ -4384,6 +4407,8 @@ SYSCTL_JAIL_PARAM(_allow, quotas, CTLTYP
+@@ -4466,6 +4489,8 @@
      "B", "Jail may set file quotas");
  SYSCTL_JAIL_PARAM(_allow, socket_af, CTLTYPE_INT | CTLFLAG_RW,
      "B", "Jail may create sockets other than just UNIX/IPv4/IPv6/route");
@@ -72,23 +72,23 @@ Index: sys/kern/kern_jail.c
  SYSCTL_JAIL_PARAM(_allow_mount, , CTLTYPE_INT | CTLFLAG_RW,
 Index: sys/sys/jail.h
 ==============================================================================
---- head/sys/sys/jail.h	Wed Jan 29 13:35:12 2014	(r261265)
-+++ head/sys/sys/jail.h	Wed Jan 29 13:41:13 2014	(r261266)
-@@ -228,7 +228,8 @@ struct prison_racct {
- #define	PR_ALLOW_MOUNT_ZFS		0x0200
+--- sys/sys/jail.h
++++ sys/sys/jail.h
+@@ -232,7 +232,8 @@
  #define	PR_ALLOW_MOUNT_PROCFS		0x0400
  #define	PR_ALLOW_MOUNT_TMPFS		0x0800
--#define	PR_ALLOW_ALL			0x0fff
-+#define	PR_ALLOW_KMEM			0x1000
-+#define	PR_ALLOW_ALL			0x1fff
+ #define	PR_ALLOW_MOUNT_FDESCFS		0x1000
+-#define	PR_ALLOW_ALL			0x1fff
++#define	PR_ALLOW_KMEM			0x2000
++#define	PR_ALLOW_ALL			0x2fff
  
  /*
   * OSD methods
 Index: usr.sbin/jail/jail.8
 ==============================================================================
---- head/usr.sbin/jail/jail.8	Wed Jan 29 13:35:12 2014	(r261265)
-+++ head/usr.sbin/jail/jail.8	Wed Jan 29 13:41:13 2014	(r261266)
-@@ -573,6 +573,17 @@ with non-jailed parts of the system.
+--- usr.sbin/jail/jail.8
++++ usr.sbin/jail/jail.8
+@@ -591,6 +591,17 @@
  Sockets within a jail are normally restricted to IPv4, IPv6, local
  (UNIX), and route.  This allows access to other protocol stacks that
  have not had jail functionality added to them.
