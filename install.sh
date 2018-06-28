@@ -2,8 +2,8 @@
 
 KERNEL="BKERNEL"
 KODIR="kernel.b"
-DIR_ORIGINAL_FILES="original-files"
-DIR_PATCHED_FILES="patched-files"
+DIR_ORIGINAL_FILES="original"
+DIR_PATCHED_FILES="changed"
 
 # test patch
 # patch -C -d /usr/src < patch.diff
