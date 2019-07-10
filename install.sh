@@ -1,7 +1,7 @@
 #!/bin/sh
 
-KERNEL="BKERNEL"
-KODIR="kernel.b"
+KERNEL="XKERNEL"
+KODIR="kernel.x"
 DIR_ORIGINAL_FILES="original"
 DIR_PATCHED_FILES="changed"
 

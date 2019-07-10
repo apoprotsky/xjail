@@ -1,0 +1,9 @@
+include           GENERIC
+ident             XKERNEL
+
+nomakeoptions     DEBUG                  # Build kernel with gdb(1) debug symbols
+nomakeoptions     WITH_CTF               # Run ctfconvert(1) for DTrace support
+
+options           VIMAGE
+
+nodevice          fdc
